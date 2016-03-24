@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import GradientBoostingClassifier
 import numpy as np
 import pandas as pd
 import math
@@ -42,24 +43,23 @@ if __name__ == '__main__':
     testID = test.as_matrix(header[0:1])
     
     #----------------------------------------
-    # train model
+    # Random Forest model
     
-    rf = RandomForestClassifier(n_estimators=100)
+    #rf = RandomForestClassifier(n_estimators=100)
     
-    rf.fit(trainArr, trainTar)
-    results = rf.predict(testArr)
+    #rf.fit(trainArr, trainTar)
+    #results_rf = rf.predict(testArr)
    
+    #print(type(testID), testID.shape)
+    #print(type(results_rf), results_rf.shape)
+    #---------------------------
+    # GBM models
     
-    misMatch = 0
-    for i in range(0, len(results)):
-        if math.fabs(results[i] - trainTar[i]) > 0:
-            misMatch += 1
+    clf = GradientBoostingClassifier(n_estimators=10).fit(trainArr, trainTar)
+    results_gbm = clf.predict(testArr)
     
-    print("mismatch ", misMatch)
-    
-    print(type(testID), testID.shape)
-    print(type(results), results.shape)
-    r1 = np.reshape(results, (75818, 1))
+
+    r1 = np.reshape(results_gbm, (75818, 1))
     x = np.concatenate([testID, r1], axis=1)
     print(type(r1), r1.shape)
     print(type(x), x.shape)
