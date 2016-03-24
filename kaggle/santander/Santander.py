@@ -3,13 +3,14 @@
 from sklearn.ensemble import RandomForestClassifier
 import numpy as np
 import pandas as pd
+import math
 
 
 if __name__ == '__main__':
     
     print("Create Training Data:")
     
-    train = pd.read_csv('train.csv')
+    train = pd.read_csv('data/train.csv')
     header = train.columns.values
     print(header)
     print(train.shape)
@@ -19,7 +20,7 @@ if __name__ == '__main__':
     print("train_1" , train_1.shape, type(train_1))
     print("train_0" , train_0.shape)
     
-    train_1_upsample = pd.concat([train_1]*24)
+    train_1_upsample = pd.concat([train_1] * 24)
     print("train_1_upsample" , train_1_upsample.shape)
     
     train_balanced = pd.concat([train_0, train_1_upsample])
@@ -36,7 +37,7 @@ if __name__ == '__main__':
     trainTar = train_balanced.as_matrix(target).ravel()  # training targets
     
     #----------------------------------------
-    test = pd.read_csv('test.csv')
+    test = pd.read_csv('data/test.csv')
     testArr = test.as_matrix(inputs)
     testID = test.as_matrix(header[0:1])
     
@@ -44,16 +45,17 @@ if __name__ == '__main__':
     # train model
     
     rf = RandomForestClassifier(n_estimators=100)
+    
     rf.fit(trainArr, trainTar)
     results = rf.predict(testArr)
    
     
     misMatch = 0
     for i in range(0, len(results)):
-        if (results[i] - trainTar[i]) > 0:
+        if math.fabs(results[i] - trainTar[i]) > 0:
             misMatch += 1
     
-    print(misMatch)
+    print("mismatch ", misMatch)
     
     print(type(testID), testID.shape)
     print(type(results), results.shape)
