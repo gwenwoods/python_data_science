@@ -5,6 +5,7 @@ from sklearn.ensemble import GradientBoostingClassifier
 import numpy as np
 import pandas as pd
 import math
+import xgboost as xgb
 
 
 if __name__ == '__main__':
@@ -45,26 +46,34 @@ if __name__ == '__main__':
     #----------------------------------------
     # Random Forest model
     
-    #rf = RandomForestClassifier(n_estimators=100)
+    # rf = RandomForestClassifier(n_estimators=100)
+    # rf.fit(trainArr, trainTar)
+    # results_rf = rf.predict(testArr)
     
-    #rf.fit(trainArr, trainTar)
-    #results_rf = rf.predict(testArr)
-   
-    #print(type(testID), testID.shape)
-    #print(type(results_rf), results_rf.shape)
     #---------------------------
     # GBM models
     
-    clf = GradientBoostingClassifier(n_estimators=10).fit(trainArr, trainTar)
-    results_gbm = clf.predict(testArr)
+    # gbm = GradientBoostingClassifier(n_estimators=40).fit(trainArr, trainTar)
+    # results_gbm = gbm.predict(testArr)
     
+    #---------------------------
+    # XGBoost
+    
+    xgbm = xgb.XGBClassifier(n_estimators=200).fit(trainArr, trainTar)
+    results_xgbm = xgbm.predict(testArr)
 
-    r1 = np.reshape(results_gbm, (75818, 1))
-    x = np.concatenate([testID, r1], axis=1)
-    print(type(r1), r1.shape)
+    #---------------------------
+    # Output the prediction
+    
+    model_result = results_xgbm
+    output_name = "results_xgbm_n200.csv"
+    
+    result = np.reshape(model_result, (75818, 1))
+    x = np.concatenate([testID, result], axis=1)
+   
+    print(type(result), result.shape)
     print(type(x), x.shape)
-    # x = pd.concat([testID, results])
-    # print(type(results[0]), results[0])
-    np.savetxt("foo3.csv", x, delimiter=",", fmt="%i")
+
+    np.savetxt(output_name, x, delimiter=",", header="ID,TARGET", comments="", fmt="%i")
 
     
