@@ -1,0 +1,17 @@
+one layer:
+
+
+----------------------------------
+2 layer base: 0.800634
+
+para_layer_1_out_dim = 64
+para_layer_1_init = "glorot_uniform"
+para_layer_1_activation = "relu"
+
+para_layer_2_out_dim = 1
+para_layer_2_init = "glorot_uniform"
+para_layer_2_activation = "sigmoid"
+
+para_batch_size = 1000
+
+-----------------------------------
