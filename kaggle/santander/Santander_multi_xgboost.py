@@ -7,15 +7,15 @@ from sklearn.cross_validation import train_test_split
 from sklearn.metrics import roc_auc_score
 from preprocess import cleanser
 
-para_num_run = 80
-para_test_size = 0.35
+para_num_run = 200
+para_test_size = 0.25
 para_missing = np.nan
 para_n_estimator = 200
-para_max_depth = 4
-para_learning_rate = 0.03
-para_subsample = 1.0
-para_colsample_bytree = 1.0
-para_early_stopping_rounds=20
+para_max_depth = 5
+para_learning_rate = 0.05
+para_subsample = 0.65
+para_colsample_bytree = 0.7
+para_early_stopping_rounds = 20
 
 ###################################################
 # perform one run of fit XGBoost model and prediction
@@ -28,8 +28,11 @@ def fit_and_predict(X_train, y_train):
     X_eval_balanced, y_eval_balanced = cleanser.DataCleanser.balanceTraining(X_eval, y_eval)
 
     # classifier & fit
-    clf = xgb.XGBClassifier(missing=para_missing, max_depth=para_max_depth, n_estimators=para_n_estimator, learning_rate=para_learning_rate,
-                             nthread=8, subsample=para_subsample, colsample_bytree=para_colsample_bytree, seed=random_seed)
+    #clf = xgb.XGBClassifier(missing=para_missing, max_depth=para_max_depth, n_estimators=para_n_estimator, learning_rate=para_learning_rate,
+    #                        nthread=8, subsample=para_subsample, colsample_bytree=para_colsample_bytree, seed=random_seed)
+    clf = xgb.XGBClassifier(missing=para_missing, max_depth=para_max_depth, n_estimators=para_n_estimator, learning_rate=para_learning_rate, 
+                            nthread=8, subsample=para_subsample, colsample_bytree=para_colsample_bytree, min_child_weight=2 , seed=random_seed)
+
     clf.fit(X_fit_balanced, y_fit_balanced, early_stopping_rounds=para_early_stopping_rounds, eval_metric="auc", eval_set=[(X_eval_balanced, y_eval_balanced)])
     print('Overall AUC:', roc_auc_score(y_fit_balanced, clf.predict_proba(X_fit_balanced)[:, 1]))
 
