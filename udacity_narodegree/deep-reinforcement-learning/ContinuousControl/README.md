@@ -50,4 +50,4 @@ Please follow the steps in `Continuous_Control.ipynb` to train the agent.
 
 The Notebook uses the following module files:
 - Continuous_Control_Env.py - the Noise class, ReplayBuffer class, DDPG_Agent class
-- Actor_Critic_Networks.py - the Actor and Critic models
+- Actor_Critic_Networks.py - the Actor and Critic models 
